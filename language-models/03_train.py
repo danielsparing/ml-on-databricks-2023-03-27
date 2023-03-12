@@ -10,6 +10,10 @@
 
 # COMMAND ----------
 
+pip install pytorch-lightning mlflow
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC 
 # MAGIC ## Distilbert Example
@@ -288,10 +292,10 @@ with mlflow.start_run(run_name = "torch") as run:
   )
 
   trainer = pl.Trainer(
-    max_epochs = 10000,
+    max_epochs = 1, # 10000,
     logger = mlf_logger,
-    accelerator="gpu",
-    devices = 4,
+    accelerator="cpu", # "gpu",
+    devices = 1, # 4,
     callbacks = [early_stop_callback]
   )
 
