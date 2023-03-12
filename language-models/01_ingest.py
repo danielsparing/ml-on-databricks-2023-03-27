@@ -10,6 +10,7 @@
 
 # COMMAND ----------
 
+!rm -rf /tmp/word2vec-get-started
 !rm -rf /dbfs/tmp/word2vec-get-started
 %cd /tmp
 !git clone https://github.com/hailiang-wang/word2vec-get-started.git
