@@ -19,7 +19,7 @@
 # COMMAND ----------
 
 dbfs_path = "/tmp/word2vec-get-started/insuranceqa/questions"
-!ls -all /dbfs{dbfs_path}
+!ls -alh /dbfs{dbfs_path}
 
 # COMMAND ----------
 
