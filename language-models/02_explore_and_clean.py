@@ -62,14 +62,16 @@ def remove_outliers(df):
 
 # COMMAND ----------
 
-use_gpu = False
+USE_GPU = False
+
+# COMMAND ----------
 
 for table in ["insuranceqa.train", "insuranceqa.test", "insuranceqa.valid"]:
 
   df = spark.sql(f"select * from {table}")
   df = remove_outliers(df)
-  if not use_gpu and table == "insuranceqa.train":
-    df = df.sample(fraction=0.2)
+  if not USE_GPU and table == "insuranceqa.train":
+    df = df.sample(fraction=0.3)
   df.write.saveAsTable(name = table, mode = "overwrite")
 
 # COMMAND ----------
