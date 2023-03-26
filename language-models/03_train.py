@@ -10,7 +10,7 @@
 
 # COMMAND ----------
 
-pip install pytorch-lightning mlflow
+pip install pytorch-lightning==1.9.4 mlflow==2.2.1
 
 # COMMAND ----------
 
@@ -38,8 +38,8 @@ with torch.no_grad():
   loss = outputs.loss
 
 predicted_class_id = logits.argmax().item()
-model.config.id2label[predicted_class_id]
-print(loss)
+print(outputs)
+print(model.config.id2label)
 
 # COMMAND ----------
 
@@ -139,6 +139,8 @@ class InsuranceDataset(Dataset):
 # COMMAND ----------
 
 training_data = InsuranceDataset(split = "train")
+test_data = InsuranceDataset(split = "test")
+
 training_data[100]
 
 # COMMAND ----------
@@ -157,9 +159,8 @@ training_data[100]
 # DBTITLE 1,Instantiating Data Loaders
 from torch.utils.data import DataLoader
 
-test_data = InsuranceDataset(split = "test")
-train_dataloader = DataLoader(training_data, batch_size=32, shuffle=True, num_workers=20)
-test_dataloader = DataLoader(test_data, batch_size=16, shuffle=False, num_workers=20)
+train_dataloader = DataLoader(training_data, batch_size=32, shuffle=True, num_workers=4)
+test_dataloader = DataLoader(test_data, batch_size=16, shuffle=False, num_workers=4)
 
 # COMMAND ----------
 
@@ -268,6 +269,11 @@ class LitModel(pl.LightningModule):
 
 # COMMAND ----------
 
+USE_GPU = True
+DEFAULT_DIR = '/dbfs/tmp/trainer_logs'
+
+# COMMAND ----------
+
 import mlflow
 from pytorch_lightning.loggers import MLFlowLogger
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
@@ -291,12 +297,15 @@ with mlflow.start_run(run_name = "torch") as run:
       tracking_uri="databricks"
   )
 
+  accelerator = "gpu" if USE_GPU else "cpu"
+
   trainer = pl.Trainer(
-    max_epochs = 1, # 10000,
+    max_epochs = 3, # 10000,
     logger = mlf_logger,
-    accelerator="cpu", # "gpu",
-    devices = 1, # 4,
-    callbacks = [early_stop_callback]
+    accelerator = accelerator,
+    devices = 1,
+    callbacks = [early_stop_callback],
+    default_root_dir=DEFAULT_DIR,
   )
 
   trainer.fit(
