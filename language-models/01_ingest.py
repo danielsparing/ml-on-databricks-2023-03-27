@@ -18,8 +18,8 @@
 
 # COMMAND ----------
 
-dbfs_path = "/dbfs/tmp/word2vec-get-started/insuranceqa/questions"
-!ls -all {dbfs_path}
+dbfs_path = "/tmp/word2vec-get-started/insuranceqa/questions"
+!ls -all /dbfs{dbfs_path}
 
 # COMMAND ----------
 
@@ -27,11 +27,12 @@ from pyspark.sql.functions import lower, regexp_replace, col
 
 def ingest_data(
   path,
+  database,
   output_table
 ):
 
-  spark.sql("create database if not exists insuranceqa")
-  spark.sql(f"drop table if exists {output_table}")
+  spark.sql(f"create database if not exists {database}")
+  spark.sql(f"drop table if exists {database}.{output_table}")
 
   df = spark.read.csv(
     path,
@@ -55,14 +56,14 @@ def clean(df):
   df = df.withColumn("question_en", regexp_replace(lower(col("question_en")), "  ", " "))
   return df
 
-def pipeline(path, output_table):
-  df = ingest_data(path, output_table)
+def pipeline(path, database, output_table):
+  df = ingest_data(path, database, output_table)
   df = clean(df)
-  df.write.saveAsTable(output_table)
+  df.write.saveAsTable(f"{database}.{output_table}")
 
-pipeline(f"{dbfs_path.replace('/dbfs', '')}/train.questions.txt", "insuranceqa.train")
-pipeline(f"{dbfs_path.replace('/dbfs', '')}/test.questions.txt", "insuranceqa.test")
-pipeline(f"{dbfs_path.replace('/dbfs', '')}/valid.questions.txt", "insuranceqa.valid")
+pipeline(f"{dbfs_path}/train.questions.txt", "insuranceqa", "train")
+pipeline(f"{dbfs_path}/test.questions.txt", "insuranceqa", "test")
+pipeline(f"{dbfs_path}/valid.questions.txt", "insuranceqa", "valid")
 
 # COMMAND ----------
 
