@@ -10,10 +10,6 @@
 
 # COMMAND ----------
 
-pip install pytorch-lightning==1.9.4 mlflow==2.2.1
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC 
 # MAGIC ## Distilbert Example
@@ -166,8 +162,8 @@ training_data[100]
 from torch.utils.data import DataLoader
 
 #TODO
-train_dataloader = # FILL-IN
-test_dataloader = # FILL-IN
+train_dataloader = DataLoader(training_data, batch_size=32, shuffle=True, num_workers=4)
+test_dataloader = DataLoader(test_data, batch_size=8, shuffle=False, num_workers=4)
 
 # COMMAND ----------
 
@@ -211,6 +207,7 @@ class LitModel(pl.LightningModule):
     ):
       super().__init__()
       self.save_hyperparameters()
+      self.learning_rate = learning_rate
       self.config = AutoConfig.from_pretrained(
         model_name_or_path,
         num_labels = num_labels,
@@ -265,7 +262,7 @@ class LitModel(pl.LightningModule):
 
     # TODO: use AdamW optimizer with a learning rate of 1e-5.
     def configure_optimizers(self):
-      return # FILL-IN
+      return AdamW(self.parameters(), lr = self.learning_rate)
 
 # COMMAND ----------
 
@@ -404,7 +401,3 @@ for question, topic in test_questions.items():
 # MAGIC %md
 # MAGIC ### TODO
 # MAGIC earlier when we defined our LitModel optimizer, we chose our learning rate somewhat arbitrarily. Try to use Hyperopt to run a few learning rates for a few minutes each, and see if you can find a better learning rate.
-
-# COMMAND ----------
-
-
