@@ -156,11 +156,18 @@ training_data[100]
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ## TODO:
+# MAGIC use [DataLoader](https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader) to load both `training_data` and `test_data`. Set the batch sizes to 32 and 16 each, and decide whether you need shuffling. Finally, set the number of workers to the number of cpu cores in your environment.
+
+# COMMAND ----------
+
 # DBTITLE 1,Instantiating Data Loaders
 from torch.utils.data import DataLoader
 
-train_dataloader = DataLoader(training_data, batch_size=32, shuffle=True, num_workers=4)
-test_dataloader = DataLoader(test_data, batch_size=16, shuffle=False, num_workers=4)
+#TODO
+train_dataloader = # FILL-IN
+test_dataloader = # FILL-IN
 
 # COMMAND ----------
 
@@ -173,6 +180,11 @@ test_dataloader = DataLoader(test_data, batch_size=16, shuffle=False, num_worker
 # MAGIC * Time to declare our Lightning Module!
 # MAGIC * Lightning Module is quite a useful class provided by PyTorch Lightning. It helps us avoid a lot of boiler plate code - and also avoid forgetting about `torch.no_grad()` when running forward pass 😃
 # MAGIC * We can customize how our model is going to be loaded, which layers in the model we are going to train or not, how metrics will be logged, etc.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC TODO: use the [AdamW](https://pytorch.org/docs/stable/generated/torch.optim.AdamW.html) optimizer with a learning rate of 1e-5.
 
 # COMMAND ----------
 
@@ -251,8 +263,9 @@ class LitModel(pl.LightningModule):
       y_hat = self.model(**batch)
       return y_hat
 
+    # TODO: use AdamW optimizer with a learning rate of 1e-5.
     def configure_optimizers(self):
-      return AdamW(self.parameters(), lr=1e-5)
+      return # FILL-IN
 
 # COMMAND ----------
 
@@ -384,4 +397,14 @@ for question, topic in test_questions.items():
   print(f"Prediction: {pred}")
   print(f"Predicted '{topic}'? {pred == topic}")
   print(f"------------------------------------------------------------------")
+
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ### TODO
+# MAGIC earlier when we defined our LitModel optimizer, we chose our learning rate somewhat arbitrarily. Try to use Hyperopt to run a few learning rates for a few minutes each, and see if you can find a better learning rate.
+
+# COMMAND ----------
+
 
