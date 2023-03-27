@@ -155,6 +155,15 @@ with mlflow.start_run(run_name="best_model"):
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC ### Further reading:
+# MAGIC 
+# MAGIC - https://docs.databricks.com/machine-learning/automl-hyperparam-tuning/index.html
+# MAGIC - https://docs.databricks.com/machine-learning/automl-hyperparam-tuning/hyperopt-best-practices.html
+# MAGIC - https://www.databricks.com/blog/2021/04/15/how-not-to-tune-your-model-with-hyperopt.html
+
+# COMMAND ----------
+
 # MAGIC %md-sandbox
 # MAGIC &copy; 2022 Databricks, Inc. All rights reserved.<br/>
 # MAGIC Apache, Apache Spark, Spark and the Spark logo are trademarks of the <a href="https://www.apache.org/">Apache Software Foundation</a>.<br/>
