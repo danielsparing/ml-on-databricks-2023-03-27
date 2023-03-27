@@ -354,17 +354,6 @@ for i in range(0, 10):
 
 # COMMAND ----------
 
-# DBTITLE 1,Logging our Artifact and Registering our Model
-with mlflow.start_run(run_id = run.info.run_id) as run:
-
-  mlflow.pytorch.log_model(
-    lit_model,
-    artifact_path = "model",
-    registered_model_name = "distilbert_en_uncased_insuranceqa"
-  )
-
-# COMMAND ----------
-
 class_mappings = {}
 
 for key in training_data.class_mappings.keys():
