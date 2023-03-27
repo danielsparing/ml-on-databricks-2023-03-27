@@ -162,8 +162,8 @@ training_data[100]
 from torch.utils.data import DataLoader
 
 #TODO
-train_dataloader = DataLoader(training_data, batch_size=32, shuffle=True, num_workers=4)
-test_dataloader = DataLoader(test_data, batch_size=8, shuffle=False, num_workers=4)
+train_dataloader = #TODO
+test_dataloader = #TODO
 
 # COMMAND ----------
 
@@ -262,7 +262,7 @@ class LitModel(pl.LightningModule):
 
     # TODO: use AdamW optimizer with a learning rate of 1e-5.
     def configure_optimizers(self):
-      return AdamW(self.parameters(), lr = self.learning_rate)
+      return #TODO
 
 # COMMAND ----------
 
